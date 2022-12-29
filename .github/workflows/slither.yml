@@ -1,6 +1,7 @@
 name: Slither Analysis
 on: 
-  branches:
+  push:
+    branches:
       - master
 jobs:
   analyze:
