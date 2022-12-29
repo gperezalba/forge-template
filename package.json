@@ -1,0 +1,22 @@
+{
+  "name": "forge-template",
+  "version": "1.0.0",
+  "description": "Foundry template gperezalba style",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "forge test --gas-report -vvv"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gperezalba/forge-template.git"
+  },
+  "author": "gperezalba@protonmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gperezalba/forge-template/issues"
+  },
+  "homepage": "https://github.com/gperezalba/forge-template#readme"
+}
