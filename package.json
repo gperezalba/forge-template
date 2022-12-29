@@ -7,16 +7,16 @@
     "test": "test"
   },
   "scripts": {
-    "test": "forge test --gas-report -vvv"
+    "build": "forge build",
+    "test": "forge test --gas-report -vvv",
+    "coverage": "forge coverage --report lcov && genhtml lcov.info -o report --branch-coverage && open report/index.html",
+    "solhint:check": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol'",
+    "solhint:fix": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol' --fix"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gperezalba/forge-template.git"
   },
   "author": "gperezalba@protonmail.com",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gperezalba/forge-template/issues"
-  },
   "homepage": "https://github.com/gperezalba/forge-template#readme"
 }
