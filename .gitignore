@@ -2,8 +2,8 @@
 cache/
 out/*
 
-!out/Counter.sol
-!out/Counter.sol/Counter.json
+!out/Contract.sol
+!out/Contract.sol/Contract.json
 
 # Ignores development broadcast logs
 !/broadcast
