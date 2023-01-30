@@ -28,7 +28,7 @@ forge install rari-capital/solmate # Already in this repo, just an example
 
  * Use this template to create a new project
 ```bash
-forge init --template https://github.com/gperezalba/forge-template
+forge init --template https://github.com/gperezalba/forge-template dir_name
 git remote set-url origin https://github.com/org/project-name.git
 ```
 
