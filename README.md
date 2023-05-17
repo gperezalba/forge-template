@@ -16,9 +16,25 @@ forge test
 
 ### Features
 
- * Write / run tests with Foundry:
+ * Compile contracts:
 ```bash
-forge test
+npm run build
+```
+
+ * Run tests:
+```bash
+npm run test
+```
+
+ * Run and serve coverage:
+```bash
+npm run coverage
+```
+
+ * Generate and serve docs (http://localhost:4000):
+```bash
+npm run doc
+npm run doc-serve
 ```
 
  * Install libraries with Foundry which work with Hardhat.

@@ -11,6 +11,8 @@
     "test": "forge test --gas-report -vvv",
     "test:fork": "forge test --fork-url https://polygon-rpc.com/ --gas-report --chain-id 137 -vvv",
     "coverage": "forge coverage --fork-url https://polygon-rpc.com/ --report lcov && lcov --remove lcov.info 'test/*' 'script/*' --output-file lcov.info --rc lcov_branch_coverage=1 && genhtml lcov.info -o report --branch-coverage && open report/index.html",
+    "doc": "forge doc --build",
+    "doc-serve": "forge doc --build --serve --port 4000",
     "solhint:check": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol'",
     "solhint:fix": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol' --fix",
     "deploy-check:goerli": "source .env && forge script script/Deploy.s.sol --rpc-url ${ETH_GOERLI_TESTNET_URL} --private-key ${PRIVATE_KEY} -vvvv",
