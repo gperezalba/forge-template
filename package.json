@@ -18,7 +18,8 @@
     "deploy-check:goerli": "source .env && forge script script/Deploy.s.sol --rpc-url ${ETH_GOERLI_TESTNET_URL} --private-key ${PRIVATE_KEY} -vvvv",
     "deploy:goerli": "source .env && forge script script/Deploy.s.sol --rpc-url ${ETH_GOERLI_TESTNET_URL} --private-key ${PRIVATE_KEY} --broadcast --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv —slow",
     "deploy-check:polygon": "source .env && forge script script/Deploy.s.sol --rpc-url ${POLYGON_MAINNET_URL} --private-key ${PRIVATE_KEY} -vvvv",
-    "deploy:polygon": "source .env && forge script script/Deploy.s.sol --rpc-url ${POLYGON_MAINNET_URL} --private-key ${PRIVATE_KEY} --broadcast --verify --etherscan-api-key ${POLYGON_API_KEY} -vvvv —slow"
+    "deploy:polygon": "source .env && forge script script/Deploy.s.sol --rpc-url ${POLYGON_MAINNET_URL} --private-key ${PRIVATE_KEY} --broadcast --verify --etherscan-api-key ${POLYGON_API_KEY} -vvvv —slow",
+    "diff-storage-etherscan:contract": "source .env && cast etherscan-source --chain 137 --etherscan-api-key ${POLYGON_API_KEY} -d etherscan <address> && forge inspect src/Contract.sol:Contract storage --pretty >> imp1.txt && forge inspect etherscan/Contract/src/Contract.sol:Contract storage --pretty >> imp2.txt && rm -rf etherscan/ && git diff --word-diff=color --word-diff-regex=. --no-index imp1.txt imp2.txt && rm imp1.txt && rm imp2.txt"
   },
   "repository": {
     "type": "git",
