@@ -1,0 +1,15 @@
+initialize.tree
+├── given the contract is not initialized
+│   ├── when owner_ is the zero address for first initialization
+│   │   └── it should revert with Counter_ZeroAddress
+│   └── when owner_ is not the zero address for first initialization
+│       ├── it should set the owner correctly
+│       ├── it should set the pending owner to zero address
+│       ├── it should initialize UUPS functionality
+│       ├── it should initialize Ownable2Step functionality
+│       └── it should complete initialization successfully
+└── given the contract is already initialized
+    ├── when owner_ is the zero address for re-initialization attempt
+    │   └── it should revert with InvalidInitialization
+    └── when owner_ is not the zero address for re-initialization attempt
+        └── it should revert with InvalidInitialization 

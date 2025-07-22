@@ -15,10 +15,11 @@
     "doc-serve": "forge doc --build --serve --port 4000",
     "solhint:check": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol'",
     "solhint:fix": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol' --fix",
-    "deploy-check:goerli": "source .env && forge script script/Deploy.s.sol --rpc-url ${ETH_GOERLI_TESTNET_URL} --private-key ${PRIVATE_KEY} -vvvv",
-    "deploy:goerli": "source .env && forge script script/Deploy.s.sol --rpc-url ${ETH_GOERLI_TESTNET_URL} --private-key ${PRIVATE_KEY} --broadcast --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv —slow",
-    "deploy-check:polygon": "source .env && forge script script/Deploy.s.sol --rpc-url ${POLYGON_MAINNET_URL} --private-key ${PRIVATE_KEY} -vvvv",
-    "deploy:polygon": "source .env && forge script script/Deploy.s.sol --rpc-url ${POLYGON_MAINNET_URL} --private-key ${PRIVATE_KEY} --broadcast --verify --etherscan-api-key ${POLYGON_API_KEY} -vvvv —slow",
+    "deploy:polygon": "source .env && forge script script/deployment/DeployPolygon.s.sol:DeployPolygon --ffi --rpc-url ${POLYGON_MAINNET_URL} --private-key ${VANITY_PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${POLYGON_API_KEY}",
+    "deploy:sepolia:dev": "source .env && forge script script/deployment/DeploySepoliaDEV.s.sol:DeploySepoliaDEV --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --resume --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
+    "deploy:sepolia:sta": "source .env && forge script script/deployment/DeploySepoliaSTA.s.sol:DeploySepoliaSTA --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
+    "deploy:sepolia:int": "source .env && forge script script/deployment/DeploySepoliaINT.s.sol:DeploySepoliaINT --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
+    "counter:setNumber:sepolia": "source .env && forge script script/Workflows.s.sol:CounterSetNumber --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv",
     "diff-storage-etherscan:contract": "source .env && cast etherscan-source --chain 137 --etherscan-api-key ${POLYGON_API_KEY} -d etherscan <address> && forge inspect src/Contract.sol:Contract storage --pretty >> imp1.txt && forge inspect etherscan/Contract/src/Contract.sol:Contract storage --pretty >> imp2.txt && rm -rf etherscan/ && git diff --word-diff=color --word-diff-regex=. --no-index imp1.txt imp2.txt && rm imp1.txt && rm imp2.txt"
   },
   "repository": {

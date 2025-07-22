@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.19;
+pragma solidity 0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {stdJson} from "forge-std/StdJson.sol";
@@ -7,21 +7,13 @@ import {stdJson} from "forge-std/StdJson.sol";
 contract Utils is Script {
     using stdJson for string;
 
-    function getAddressFromConfigJson(string memory key) public view returns (address) {
-        string memory json = getConfigJson();
+    function getAddressFromReport(string memory key) public view returns (address) {
+        string memory env = vm.envString("ENV");
+        string memory path =
+            string.concat("./reports/", vm.toString(block.chainid), "/", env, "/latest-deployment.json");
+        string memory json = vm.readFile(path);
         bytes memory data = json.parseRaw(key);
         return abi.decode(data, (address));
-    }
-
-    function getConfigJson() public view returns (string memory) {
-        return vm.readFile(getJsonConfigPath());
-    }
-
-    function getJsonConfigPath() public view returns (string memory) {
-        string memory inputDir = string.concat(vm.projectRoot(), "/addresses/");
-        string memory chainDir = string.concat(vm.toString(block.chainid), "/");
-        string memory file = string.concat("config.json");
-        return string.concat(inputDir, chainDir, file);
     }
 
     function address2String(address addr) public pure returns (string memory) {

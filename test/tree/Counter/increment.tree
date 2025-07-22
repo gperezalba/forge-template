@@ -1,0 +1,15 @@
+increment.tree
+├── given the current number is zero
+│   ├── it should increment number to one
+│   └── it should update the storage correctly
+├── given the current number is one
+│   ├── it should increment number to two
+│   └── it should update the storage correctly
+├── given the current number is a positive value less than max uint256
+│   ├── it should increment number by one
+│   └── it should update the storage correctly
+├── given the current number is close to maximum uint256 value
+│   ├── it should increment number by one
+│   └── it should update the storage correctly
+└── given the current number is the maximum uint256 value
+    └── it should revert with arithmetic overflow error 

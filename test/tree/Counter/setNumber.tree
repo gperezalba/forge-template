@@ -1,0 +1,23 @@
+setNumber.tree
+├── given the caller is the owner
+│   ├── when newNumber is zero as owner
+│   │   ├── it should set number to zero
+│   │   └── it should update the storage correctly
+│   ├── when newNumber is a positive value as owner
+│   │   ├── it should set number to newNumber
+│   │   └── it should update the storage correctly
+│   ├── when newNumber is a large value as owner
+│   │   ├── it should set number to the large value
+│   │   └── it should update the storage correctly
+│   └── when newNumber is the maximum uint256 value as owner
+│       ├── it should set number to max uint256
+│       └── it should update the storage correctly
+└── given the caller is not the owner
+    ├── when newNumber is zero as non-owner
+    │   └── it should revert with OwnableUnauthorizedAccount
+    ├── when newNumber is a positive value as non-owner
+    │   └── it should revert with OwnableUnauthorizedAccount
+    ├── when newNumber is a large value as non-owner
+    │   └── it should revert with OwnableUnauthorizedAccount
+    └── when newNumber is the maximum uint256 value as non-owner
+        └── it should revert with OwnableUnauthorizedAccount 

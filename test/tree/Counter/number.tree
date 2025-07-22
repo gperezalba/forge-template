@@ -1,0 +1,7 @@
+number.tree
+├── given the number is zero
+│   └── it should return zero
+├── given the number is a positive value
+│   └── it should return the current stored number value
+└── given the number is the maximum uint256 value
+    └── it should return the maximum uint256 value 
