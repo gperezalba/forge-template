@@ -71,4 +71,4 @@ etherscan_api_key="YOURETHERSCANAPIKEY"
 # [default.optimizer_details.yulDetails]
 # stackAllocation = true                                        # whether to enable the improvement of allocation of stack slots for variables or not
 # optimizerSteps = 'dhfoDgvulfnTUtnIf'                          # the optimization steps to be applied
-fs_permissions = [{ access = "read-write", path = "./addresses/"}]
+fs_permissions = [{ access = "read-write", path = "./reports"}]
