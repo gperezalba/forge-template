@@ -16,7 +16,7 @@
     "solhint:check": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol'",
     "solhint:fix": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol' --fix",
     "deploy:polygon": "source .env && forge script script/deployment/DeployPolygon.s.sol:DeployPolygon --ffi --rpc-url ${POLYGON_MAINNET_URL} --private-key ${VANITY_PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${POLYGON_API_KEY}",
-    "deploy:sepolia:dev": "source .env && forge script script/deployment/DeploySepoliaDEV.s.sol:DeploySepoliaDEV --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --resume --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
+    "deploy:sepolia:dev": "source .env && forge script script/deployment/DeploySepoliaDEV.s.sol:DeploySepoliaDEV --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
     "deploy:sepolia:sta": "source .env && forge script script/deployment/DeploySepoliaSTA.s.sol:DeploySepoliaSTA --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
     "deploy:sepolia:int": "source .env && forge script script/deployment/DeploySepoliaINT.s.sol:DeploySepoliaINT --ffi --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv --verify --etherscan-api-key ${ETHERSCAN_API_KEY}",
     "counter:setNumber:sepolia": "source .env && forge script script/Workflows.s.sol:CounterSetNumber --rpc-url ${SEPOLIA_URL} --private-key ${PRIVATE_KEY} --broadcast --slow -vvvv",
