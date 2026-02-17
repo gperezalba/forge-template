@@ -29,14 +29,12 @@ contract DeployReport is Script {
         //proxies
         {
             string memory jsonProxies = "proxies";
-            vm.serializeAddress(jsonProxies, "counter", report.proxies.counter);
-            proxiesOutput = vm.serializeAddress(jsonProxies, "counter2", report.proxies.counter);
+            proxiesOutput = vm.serializeAddress(jsonProxies, "counter", report.proxies.counter);
         }
         //implementations
         {
             string memory jsonImplementations = "implementations";
-            vm.serializeAddress(jsonImplementations, "counter", report.implementations.counter);
-            impOutput = vm.serializeAddress(jsonImplementations, "counter2", report.implementations.counter);
+            impOutput = vm.serializeAddress(jsonImplementations, "counter", report.implementations.counter);
         }
         //tokens
         {

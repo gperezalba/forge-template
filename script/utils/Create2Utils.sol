@@ -14,6 +14,8 @@ library Create2Utils {
         hex"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3";
 
 
+    /// @dev Uses vm.etch to deploy the factory in local/fork simulations.
+    /// On live networks the factory must already exist at SAFE_SINGLETON_FACTORY.
     function loadCreate2Factory() internal {
         if (SAFE_SINGLETON_FACTORY.code.length == 0) {
             vm.etch(SAFE_SINGLETON_FACTORY, SAFE_SINGLETON_FACTORY_BYTECODE);
