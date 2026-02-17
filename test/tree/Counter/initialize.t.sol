@@ -4,11 +4,11 @@ pragma solidity 0.8.24;
 import {Test} from "forge-std/Test.sol";
 import {ERC1967Proxy} from "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
-import {Fixture} from "test/shared/Fixture.sol";
+import {CounterBase} from "test/CounterBase.t.sol";
 import {Counter} from "src/Counter.sol";
 import {ICounter} from "src/interfaces/ICounter.sol";
 
-contract CounterInitializeTest is Test, Fixture {
+contract CounterInitializeTest is Test, CounterBase {
     // Events from OpenZeppelin
     event Initialized(uint64 version);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
@@ -16,7 +16,8 @@ contract CounterInitializeTest is Test, Fixture {
     Counter internal counterImplementation;
     Counter internal testCounter;
 
-    function setUp() public {
+    function setUp() public override {
+        super.setUp();
         // Deploy fresh implementation for testing
         counterImplementation = new Counter();
     }

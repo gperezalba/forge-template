@@ -15,8 +15,10 @@ abstract contract DeployBase is ConfigAbstract, Script, DeployReport, DeployCont
         console.log("sender", msg.sender);
         ConfigAbstract.Config memory config = _getInitialConfig();
         _checkInitialConfig(config);
+        string memory envLabel = _envLabel(config.env);
+        string memory version = abi.decode(vm.parseJson(vm.readFile("package.json"), ".version"), (string));
         vm.startBroadcast();
-        DeployContracts.Report memory deployReport = _deployContracts(config.deployerConfig);
+        DeployContracts.Report memory deployReport = _deployContracts(config.deployerConfig, envLabel, version);
         vm.stopBroadcast();
         ConfigAbstract.EnvConfig memory envConfig = _getEnvConfig();
         console.log("Generate report");
@@ -26,5 +28,11 @@ abstract contract DeployBase is ConfigAbstract, Script, DeployReport, DeployCont
 
     function _checkInitialConfig(ConfigAbstract.Config memory config) internal pure {
         require(config.deployerConfig.owner != address(0), "config.owner is zero address");
+    }
+
+    function _envLabel(Environment env) internal pure returns (string memory) {
+        if (env == Environment.DEV) return "DEV";
+        if (env == Environment.INT) return "INT";
+        return "PRO&STA";
     }
 }

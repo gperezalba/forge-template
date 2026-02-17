@@ -4,13 +4,14 @@ pragma solidity 0.8.24;
 import {Test} from "forge-std/Test.sol";
 import {Ownable} from "openzeppelin-contracts/contracts/access/Ownable.sol";
 
-import {Fixture} from "test/shared/Fixture.sol";
+import {CounterBase} from "test/CounterBase.t.sol";
 import {Counter} from "src/Counter.sol";
 
-contract CounterSetNumberTest is Test, Fixture {
+contract CounterSetNumberTest is Test, CounterBase {
     Counter internal testCounter;
 
-    function setUp() public {
+    function setUp() public override {
+        super.setUp();
         testCounter = counter;
     }
 

@@ -13,15 +13,26 @@ contract Deployer {
         address owner;
     }
 
-    address public immutable COUNTER;
+    address public immutable AUTHORIZED;
+    address public COUNTER;
+    bool private _deployed;
+
+    error Deployer_Unauthorized();
+    error Deployer_AlreadyDeployed();
 
     event Deploy(address counter);
 
-    constructor(Addresses memory implementations, Config memory config) {
-        {
-            bytes memory initializeCalldata = abi.encodeWithSelector(ICounter.initialize.selector, config.owner);
-            COUNTER = _createProxy(implementations.counter, initializeCalldata);
-        }
+    constructor() {
+        AUTHORIZED = tx.origin;
+    }
+
+    function deploy(Addresses memory implementations, Config memory config) external {
+        if (tx.origin != AUTHORIZED) revert Deployer_Unauthorized();
+        if (_deployed) revert Deployer_AlreadyDeployed();
+        _deployed = true;
+
+        bytes memory initializeCalldata = abi.encodeWithSelector(ICounter.initialize.selector, config.owner);
+        COUNTER = _createProxy(implementations.counter, initializeCalldata);
 
         emit Deploy(COUNTER);
     }

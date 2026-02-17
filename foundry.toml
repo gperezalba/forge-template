@@ -55,7 +55,7 @@ rpc_storage_caching = { chains = "all", endpoints = "all" }
 no_storage_caching = false
 # use ipfs method to generate the metadata hash, solc's default.
 # To not include the metadata hash, to allow for deterministic code: https://docs.soliditylang.org/en/latest/metadata.html, use "none"
-bytecode_hash = "ipfs"
+bytecode_hash = "none"
 # If this option is enabled, Solc is instructed to generate output (bytecode) only for the required contracts
 # this can reduce compile time for `forge test` a bit but is considered experimental at this point.
 sparse_mode = false
@@ -71,4 +71,4 @@ etherscan_api_key="YOURETHERSCANAPIKEY"
 # [default.optimizer_details.yulDetails]
 # stackAllocation = true                                        # whether to enable the improvement of allocation of stack slots for variables or not
 # optimizerSteps = 'dhfoDgvulfnTUtnIf'                          # the optimization steps to be applied
-fs_permissions = [{ access = "read-write", path = "./reports"}]
+fs_permissions = [{ access = "read-write", path = "./reports"}, { access = "read", path = "./package.json"}]

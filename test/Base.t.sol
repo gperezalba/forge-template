@@ -8,40 +8,34 @@ import {ConfigAbstract, Deployer} from "script/deployment/config/ConfigAbstract.
 
 import {ERC20Mock} from "./mocks/ERC20Mock.sol";
 
-import {Counter} from "src/Counter.sol";
-
 // solhint-disable no-console
 // solhint-disable immutable-vars-naming
 
-contract Fixture is Test, DeployContracts, ConfigAbstract {
+contract Base is Test, DeployContracts, ConfigAbstract {
     // Test accounts
-    address public immutable owner;
-    address public immutable nonOwner;
+    address public owner = makeAddr("owner");
+    address public nonOwner = makeAddr("nonOwner");
 
     // Deployed system
     DeployContracts.Report public deployReport;
 
     // Mock USDT for testing
-    ERC20Mock public immutable mockUSDT;
+    ERC20Mock public mockUSDT = new ERC20Mock("Test USDT", "TUSDT", 6);
 
-    // Contract instances for easy access
-    Counter public counter;
-
-    constructor() {
-        owner = makeAddr("test_owner");
-        nonOwner = makeAddr("test_non_owner");
-        mockUSDT = new ERC20Mock("Test USDT", "TUSDT", 6);
+    function setUp() public virtual {
+        vm.label(address(mockUSDT), "mockUSDT");
 
         // Deploy contracts
         _deployProjectContracts();
 
-        // Initialize counter reference
-        counter = Counter(deployReport.proxies.counter);
+        vm.label(deployReport.deployer, "deployer");
+        vm.label(deployReport.implementations.counter, "counterImpl");
     }
 
     function _deployProjectContracts() internal {
         Config memory config = _getInitialConfig();
-        deployReport = _deployContracts(config.deployerConfig);
+        string memory version = abi.decode(vm.parseJson(vm.readFile("package.json"), ".version"), (string));
+        deployReport = _deployContracts(config.deployerConfig, "DEV", version);
     }
 
     function _getInitialConfig() internal view override returns (Config memory config) {
