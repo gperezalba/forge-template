@@ -23,11 +23,11 @@ contract Deployer {
     event Deploy(address counter);
 
     constructor() {
-        AUTHORIZED = tx.origin;
+        AUTHORIZED = msg.sender;
     }
 
     function deploy(Addresses memory implementations, Config memory config) external {
-        if (tx.origin != AUTHORIZED) revert Deployer_Unauthorized();
+        if (msg.sender != AUTHORIZED) revert Deployer_Unauthorized();
         if (_deployed) revert Deployer_AlreadyDeployed();
         _deployed = true;
 
