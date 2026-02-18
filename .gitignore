@@ -17,3 +17,6 @@ report/
 
 # Dotenv file
 .env
+
+# Documentation
+documentation/
