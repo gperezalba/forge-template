@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.24;
 
-// solhint-disable custom-errors
+// solhint-disable
 
 import {Vm} from "forge-std/Vm.sol";
 

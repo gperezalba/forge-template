@@ -1,2 +1,3 @@
 node_modules
-Greeter.sol
+test/
+script/

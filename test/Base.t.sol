@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.24;
 
+// solhint-disable
+
 import {Test} from "forge-std/Test.sol";
 
 import {DeployContracts} from "script/deployment/misc/DeployContracts.sol";
 import {ConfigAbstract, Deployer} from "script/deployment/config/ConfigAbstract.sol";
 
 import {ERC20Mock} from "./mocks/ERC20Mock.sol";
-
-// solhint-disable no-console
-// solhint-disable immutable-vars-naming
 
 contract Base is Test, DeployContracts, ConfigAbstract {
     // Test accounts

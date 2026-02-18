@@ -9,6 +9,7 @@ import {ERC1967Utils} from "openzeppelin-contracts/contracts/proxy/ERC1967/ERC19
 //solhint-disable no-empty-blocks
 
 /// @title UUPSOwnable2Step
+/// @author gperezalba
 /// @notice Implementation of UUPS proxy pattern with two-step ownership transfer
 /// @dev Combines UUPSUpgradeable with Ownable2StepUpgradeable for secure upgradeable contracts
 /// @custom:security-contact security@yourproject.com

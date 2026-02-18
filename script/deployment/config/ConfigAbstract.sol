@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.24;
 
+// solhint-disable
+
 import {Deployer} from "src/utils/Deployer.sol";
 
 abstract contract ConfigAbstract {

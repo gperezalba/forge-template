@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.24;
 
-// solhint-disable quotes
+// solhint-disable
 
 import {Script} from "forge-std/Script.sol";
 import {DeployContracts} from "./DeployContracts.sol";

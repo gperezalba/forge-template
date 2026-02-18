@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.24;
 
+// solhint-disable
+
 import {Base} from "./Base.t.sol";
 
 import {Counter} from "src/Counter.sol";

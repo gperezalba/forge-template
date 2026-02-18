@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.24;
 
-// solhint-disable no-empty-blocks
+// solhint-disable
 
 import {DeployBase} from "./misc/DeployBase.s.sol";
 import {ConfigSepoliaDEV} from "./config/ConfigSepoliaDEV.sol";

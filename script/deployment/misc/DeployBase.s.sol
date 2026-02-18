@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.24;
 
-// solhint-disable no-console
-// solhint-disable custom-errors
+// solhint-disable
 
 import {Script, console} from "forge-std/Script.sol";
 import {ConfigAbstract} from "../config/ConfigAbstract.sol";
