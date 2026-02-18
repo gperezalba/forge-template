@@ -4,7 +4,7 @@ pragma solidity 0.8.24;
 // solhint-disable
 
 import {Test} from "forge-std/Test.sol";
-import {Ownable} from "openzeppelin-contracts/contracts/access/Ownable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 import {CounterBase} from "test/CounterBase.t.sol";
 import {Counter} from "src/Counter.sol";

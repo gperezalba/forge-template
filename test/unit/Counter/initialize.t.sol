@@ -4,7 +4,7 @@ pragma solidity 0.8.24;
 // solhint-disable
 
 import {Test} from "forge-std/Test.sol";
-import {ERC1967Proxy} from "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 import {CounterBase} from "test/CounterBase.t.sol";
 import {Counter} from "src/Counter.sol";
