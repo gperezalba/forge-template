@@ -27,9 +27,6 @@ bytecode_hash = "none"
 ignored_error_codes = []
 fs_permissions = [{ access = "read-write", path = "./reports"}, { access = "read", path = "./package.json"}]
 
-[profile.ci]
-inherits = "default"
-
 [profile.default.fuzz]
 runs = 1000
 

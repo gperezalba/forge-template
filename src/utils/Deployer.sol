@@ -37,16 +37,18 @@ contract Deployer {
     /// @param counter Address of the deployed Counter proxy
     event Deploy(address indexed counter);
 
-    /// @notice Sets the authorized deployer to the contract creator
+    /// @notice Sets the authorized deployer to tx.origin (needed for CREATE2 factory deployment)
     constructor() {
-        AUTHORIZED = msg.sender;
+        // solhint-disable-next-line avoid-tx-origin
+        AUTHORIZED = tx.origin;
     }
 
     /// @notice Deploys and initializes all project proxies
     /// @param implementations Addresses of the implementation contracts
     /// @param config Deployment configuration (owner, etc.)
-    function deploy(Addresses memory implementations, Config memory config) external {
-        if (msg.sender != AUTHORIZED) revert Deployer_Unauthorized();
+    function deploy(Addresses calldata implementations, Config calldata config) external {
+        // solhint-disable-next-line avoid-tx-origin
+        if (tx.origin != AUTHORIZED) revert Deployer_Unauthorized();
         if (_deployed) revert Deployer_AlreadyDeployed();
         _deployed = true;
 
