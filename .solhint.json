@@ -1,5 +1,6 @@
 {
     "extends": "solhint:recommended",
+    "plugins": [],
     "rules": {
         "compiler-version": [
             "error",
@@ -19,6 +20,7 @@
         "quotes": [
             "error",
             "double"
-        ]
+        ],
+        "import-path-check": "off"
     }
 }
