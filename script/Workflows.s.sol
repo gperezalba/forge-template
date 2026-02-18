@@ -6,16 +6,15 @@ import {stdJson} from "forge-std/StdJson.sol";
 import {Counter} from "src/Counter.sol";
 import {Deployer} from "src/utils/Deployer.sol";
 
-// solhint-disable immutable-vars-naming
 contract Ecosystem is Script {
     using stdJson for string;
 
-    Deployer public immutable deployer;
-    Counter public immutable counter;
+    Deployer public immutable DEPLOYER;
+    Counter public immutable COUNTER;
 
     constructor() {
-        deployer = Deployer(_getAddressFromReport(".deployer"));
-        counter = Counter(_getAddressFromReport(".proxies.counter"));
+        DEPLOYER = Deployer(_getAddressFromReport(".deployer"));
+        COUNTER = Counter(_getAddressFromReport(".proxies.counter"));
     }
 
     function _getAddressFromReport(string memory key) internal view returns (address) {
@@ -31,7 +30,7 @@ contract Ecosystem is Script {
 contract CounterSetNumber is Ecosystem {
     function run() external {
         vm.startBroadcast();
-        counter.setNumber(100);
+        COUNTER.setNumber(100);
         vm.stopBroadcast();
     }
 }

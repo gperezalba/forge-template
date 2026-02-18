@@ -14,7 +14,7 @@ contract Deployer {
     }
 
     address public immutable AUTHORIZED;
-    address public COUNTER;
+    address public counter;
     bool private _deployed;
 
     error Deployer_Unauthorized();
@@ -32,9 +32,9 @@ contract Deployer {
         _deployed = true;
 
         bytes memory initializeCalldata = abi.encodeWithSelector(ICounter.initialize.selector, config.owner);
-        COUNTER = _createProxy(implementations.counter, initializeCalldata);
+        counter = _createProxy(implementations.counter, initializeCalldata);
 
-        emit Deploy(COUNTER);
+        emit Deploy(counter);
     }
 
     function _createProxy(address proxyImplementation, bytes memory initializeCalldata)

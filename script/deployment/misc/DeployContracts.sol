@@ -42,9 +42,9 @@ contract DeployContracts {
     ) internal returns (Deployer.Addresses memory proxies, Deployer deployer) {
         bytes32 salt = Create2Utils.computeSalt("Deployer", envLabel, version);
         deployer = Deployer(Create2Utils.create2Deploy(salt, type(Deployer).creationCode));
-        if (deployer.COUNTER() == address(0)) {
+        if (deployer.counter() == address(0)) {
             deployer.deploy(implementations, deployerConfig);
         }
-        proxies.counter = deployer.COUNTER();
+        proxies.counter = deployer.counter();
     }
 }

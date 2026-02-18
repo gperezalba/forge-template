@@ -148,19 +148,13 @@ contract CounterNumberTest is Test, CounterBase {
         vm.prank(owner);
         testCounter.setNumber(testValue);
 
-        // Store gas before call
-        uint256 gasBefore = gasleft();
         uint256 result = testCounter.number();
-        uint256 gasAfter = gasleft();
 
         // View function should not change state
         assertEq(result, testValue);
 
         // Call again to ensure state didn't change
         assertEq(testCounter.number(), testValue);
-
-        // Note: In tests, view functions may still consume gas,
-        // but they don't modify state
     }
 
     function test_NumberGetterWithEdgeValues() external {

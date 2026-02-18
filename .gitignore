@@ -5,10 +5,15 @@ out/*
 !out/Contract.sol
 !out/Contract.sol/Contract.json
 
-# Ignores development broadcast logs
+# Ignores development and testnet broadcast logs
 !/broadcast
 /broadcast/*/31337/
+/broadcast/*/11155111/
 /broadcast/**/dry-run/
+
+# Coverage
+lcov.info
+report/
 
 # Dotenv file
 .env

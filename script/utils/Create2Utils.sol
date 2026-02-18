@@ -6,7 +6,7 @@ pragma solidity 0.8.24;
 import {Vm} from "forge-std/Vm.sol";
 
 library Create2Utils {
-    Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
+    Vm private constant VM = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
 
     address internal constant SAFE_SINGLETON_FACTORY = 0x914d7Fec6aaC8cd542e72Bca78B30650d45643d7;
 
@@ -18,7 +18,7 @@ library Create2Utils {
     /// On live networks the factory must already exist at SAFE_SINGLETON_FACTORY.
     function loadCreate2Factory() internal {
         if (SAFE_SINGLETON_FACTORY.code.length == 0) {
-            vm.etch(SAFE_SINGLETON_FACTORY, SAFE_SINGLETON_FACTORY_BYTECODE);
+            VM.etch(SAFE_SINGLETON_FACTORY, SAFE_SINGLETON_FACTORY_BYTECODE);
         }
     }
 

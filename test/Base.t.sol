@@ -20,10 +20,10 @@ contract Base is Test, DeployContracts, ConfigAbstract {
     DeployContracts.Report public deployReport;
 
     // Mock USDT for testing
-    ERC20Mock public mockUSDT = new ERC20Mock("Test USDT", "TUSDT", 6);
+    ERC20Mock public mockUsdt = new ERC20Mock("Test USDT", "TUSDT", 6);
 
     function setUp() public virtual {
-        vm.label(address(mockUSDT), "mockUSDT");
+        vm.label(address(mockUsdt), "mockUsdt");
 
         // Deploy contracts
         _deployProjectContracts();
@@ -45,7 +45,7 @@ contract Base is Test, DeployContracts, ConfigAbstract {
     }
 
     function _getEnvConfig() internal view override returns (EnvConfig memory envConfig) {
-        envConfig = EnvConfig({usdt: address(mockUSDT)});
+        envConfig = EnvConfig({usdt: address(mockUsdt)});
         return envConfig;
     }
 }
