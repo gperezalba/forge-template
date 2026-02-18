@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.24;
 
 import {Ownable2StepUpgradeable} from "openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol";
