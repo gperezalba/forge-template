@@ -395,6 +395,35 @@ Full NatSpec conventions are in [natspec.md](natspec.md). Summary:
 
 ---
 
+## Development Validation Tools
+
+Trail of Bits skills (`~/.claude/skills/trailofbits/`) that complement the development workflow. Use these **while writing contracts**, not just during audits.
+
+### During development
+
+| Skill | When to run | What it does |
+|-------|-------------|--------------|
+| `/guidelines-advisor` | After writing first draft of a contract | Reviews architecture, upgradeability patterns, implementation quality, inheritance, events, and common pitfalls. Provides prioritized recommendations with file:line references |
+| `/entry-point-analyzer` | After defining external functions | Maps all state-changing entry points and classifies them by access level (public, role-restricted, contract-only). Validates your access control model matches intent |
+| `/spec-to-code-compliance` | When you have a spec/whitepaper | Verifies code implements exactly what documentation specifies. Finds gaps, undocumented behavior, and misalignments with confidence scores |
+
+### Before each commit
+
+| Skill | When to run | What it does |
+|-------|-------------|--------------|
+| `/secure-workflow-guide` | On every check-in or before deploy | 5-step workflow: Slither scan → special feature checks (upgradeability, ERC conformance) → visual security diagrams → security property documentation → manual review areas |
+
+### For specific patterns
+
+| Skill | When to run | What it does |
+|-------|-------------|--------------|
+| `/token-integration-analyzer` | When integrating external tokens | Checks 24+ weird ERC20 patterns (fee-on-transfer, rebasing, blocklist, non-standard decimals, approval race conditions). Validates `SafeERC20` usage and defensive patterns |
+| `/property-based-testing` | When writing invariant tests | Suggests properties for Echidna/Medusa fuzzing. Detects patterns suitable for property-based testing (state invariants, arithmetic constraints, serialization pairs) |
+
+> **Note**: These skills require installation via `/plugin install trailofbits/skills/plugins/<plugin-name>`. They adapt gracefully when tools (Slither, Echidna) are unavailable, performing manual analysis instead.
+
+---
+
 ## Checklist Before Shipping
 
 - [ ] All state-changing functions follow CEI

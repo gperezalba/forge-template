@@ -11,3 +11,4 @@
 | [btt-tests.md](solidity/btt-tests.md) | Branching Tree Technique: `.tree` spec format, bulloak scaffold, and workflow |
 | [test-implementation.md](solidity/test-implementation.md) | Test types (unit, fuzz, integration, fork, invariant), inheritance, and patterns |
 | [ai-automate-migration.md](solidity/ai-automate-migration.md) | Interactive guide for migrating existing Foundry projects to this template's structure |
+| [security-audit.md](solidity/security-audit.md) | Vulnerability taxonomy (Solidity + DeFi), security patterns, audit checklist, and ToB tools reference |
