@@ -1,7 +1,8 @@
 ---
 name: sol-integration
-description: "[Solidity] Generate CONTRACT_INTEGRATION.md — a frontend/backend integration guide listing all externally callable functions, public state readers, events to index, errors, and deployed addresses from the deployment report."
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+description: "Generate CONTRACT_INTEGRATION.md — a frontend/backend integration guide listing all externally callable functions, public state readers, events to index, errors, and deployed addresses from the deployment report. Use when the user asks to generate an integration guide or reference for frontend/backend developers."
+tools: Read, Write, Glob, Grep
+model: sonnet
 ---
 
 # Solidity — Generate Contract Integration Guide

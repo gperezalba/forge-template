@@ -28,8 +28,6 @@ Before doing anything, ask the user:
 
 ### Create `src/interfaces/I<ContractName>.sol`
 
-Follow the existing pattern from `ICounter.sol`:
-
 ```solidity
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.24;
@@ -52,8 +50,6 @@ interface I<ContractName> {
 ```
 
 ### Create `src/<ContractName>.sol`
-
-Follow the existing pattern from `Counter.sol`:
 
 ```solidity
 // SPDX-License-Identifier: UNLICENSED
@@ -87,9 +83,11 @@ If the user provided extra init params, adjust `initialize()`, `Deployer.Config`
 
 ### 3.1 Add to `Addresses` struct
 
+Add the new field to the existing `Addresses` struct:
+
 ```solidity
 struct Addresses {
-    address counter;
+    // ... existing fields
     address <contractName>;  // ← ADD (camelCase)
 }
 ```
@@ -126,11 +124,13 @@ If extra init params exist, include them in the selector encoding.
 
 ### 3.5 Update `Deploy` event
 
-Add the new address to the event:
+Add the new address to the event parameters:
 
 ```solidity
-event Deploy(address indexed counter, address indexed <contractName>);
+event Deploy(/* existing params */, address indexed <contractName>);
 ```
+
+**If this is the first contract** (scaffold project with `event Deploy()`): add the first parameter directly.
 
 Update the `emit Deploy(...)` call accordingly.
 
@@ -152,6 +152,8 @@ import {<ContractName>} from "src/<ContractName>.sol";
 
 ### 4.2 Add to `_deployImplementations()`
 
+Add the import for the contract at the top of the file and add the deployment lines. **If this is the first contract** (scaffold project), replace the `// sol-add-contract will add implementation deployments here` comment:
+
 ```solidity
 bytes32 <contractName>Salt = Create2Utils.computeSalt("<ContractName>", version);
 implementations.<contractName> = Create2Utils.create2Deploy(<contractName>Salt, type(<ContractName>).creationCode);
@@ -165,7 +167,9 @@ After the `deployer.deploy(...)` call, read the new proxy address:
 proxies.<contractName> = deployer.<contractName>();
 ```
 
-Also add the `deployer.<contractName>() == address(0)` check if the existing pattern checks a specific contract (currently it checks `deployer.counter()`). If adding the first extra contract, the existing check is fine — but if the Deployer's `_deployed` guard is the real protection, no additional check is needed.
+**If this is the first contract being added** (scaffold project): replace the placeholder comment `// proxies.<contractName> = deployer.<contractName>();` with the actual line. The idempotency check uses `!deployer.deployed()` — no additional check is needed.
+
+**If contracts already exist**: add the new `proxies.<contractName> = deployer.<contractName>();` line after the existing proxy reads.
 
 ---
 
@@ -173,10 +177,23 @@ Also add the `deployer.<contractName>() == address(0)` check if the existing pat
 
 ### 5.1 Add to proxies serialization block
 
+**If this is the first contract being added** (scaffold project with placeholder): replace the `proxiesOutput = vm.serializeString(jsonProxies, "empty", "true");` line with:
+
 ```solidity
 {
     string memory jsonProxies = "proxies";
-    vm.serializeAddress(jsonProxies, "counter", report.proxies.counter);
+    proxiesOutput = vm.serializeAddress(jsonProxies, "<contractName>", report.proxies.<contractName>);
+}
+```
+
+Also remove the `// sol-add-contract: replace the line above...` comment.
+
+**If contracts already exist**: add the new `vm.serializeAddress` line and move the `proxiesOutput =` assignment to it:
+
+```solidity
+{
+    string memory jsonProxies = "proxies";
+    vm.serializeAddress(jsonProxies, "existingContract", report.proxies.existingContract);
     proxiesOutput = vm.serializeAddress(jsonProxies, "<contractName>", report.proxies.<contractName>);
 }
 ```
@@ -185,10 +202,12 @@ Also add the `deployer.<contractName>() == address(0)` check if the existing pat
 
 ### 5.2 Add to implementations serialization block
 
+Same logic as proxies — if first contract, replace the placeholder. If not, add and move the assignment:
+
 ```solidity
 {
     string memory jsonImplementations = "implementations";
-    vm.serializeAddress(jsonImplementations, "counter", report.implementations.counter);
+    vm.serializeAddress(jsonImplementations, "existingContract", report.implementations.existingContract);
     impOutput = vm.serializeAddress(jsonImplementations, "<contractName>", report.implementations.<contractName>);
 }
 ```
@@ -199,7 +218,9 @@ Same rule: last line gets the assignment.
 
 ## Phase 6: Update Test Base (`test/Base.t.sol`)
 
-### 6.1 Add label in `setUp()`
+### 6.1 Add implementation label in `setUp()`
+
+Add this line after the existing `vm.label` calls (or after the `// sol-add-contract will add implementation labels here` comment if this is the first contract):
 
 ```solidity
 vm.label(deployReport.implementations.<contractName>, "<contractName>Impl");
@@ -232,8 +253,6 @@ contract <ContractName>Base is Base {
 ---
 
 ## Phase 7: Create Single-Deployment Script (`script/single-deployments/<ContractName>.s.sol`)
-
-Follow the pattern from `Counter.s.sol`:
 
 ```solidity
 // SPDX-License-Identifier: UNLICENSED

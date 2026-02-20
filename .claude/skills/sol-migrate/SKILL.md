@@ -59,10 +59,16 @@ ffi = true
 fs_permissions = [{ access = "read-write", path = "./" }]
 
 [rpc_endpoints]
-# one per chain the project uses
+# One entry per chain. Values come from .env via ${VAR} interpolation.
+# Example:
+# sepolia = "${SEPOLIA_URL}"
+# polygon = "${POLYGON_MAINNET_URL}"
 
 [etherscan]
-# one per chain for verification
+# One entry per chain for contract verification.
+# Example:
+# sepolia = { key = "${ETHERSCAN_API_KEY}" }
+# polygon = { key = "${POLYGON_API_KEY}" }
 
 [fuzz]
 runs = 1000
@@ -71,6 +77,10 @@ runs = 1000
 runs = 256
 depth = 50
 ```
+
+**IMPORTANT — Named endpoints**: Once `[rpc_endpoints]` and `[etherscan]` are defined in `foundry.toml`, **all** `package.json` scripts MUST use the named endpoint aliases (e.g. `--rpc-url sepolia`) instead of raw env vars (e.g. `--rpc-url ${SEPOLIA_URL}`). Similarly, `--verify` is enough — drop `--etherscan-api-key ${...}` since Foundry resolves the key from `[etherscan]` by chain. This also means `source .env &&` is no longer needed for scripts that only use RPC/etherscan (Foundry reads `.env` automatically for `${VAR}` interpolation in `foundry.toml`). Keep `source .env &&` only for scripts that reference env vars directly in the shell command (e.g. `--private-key ${PRIVATE_KEY}`).
+
+**IMPORTANT — TOML section ordering**: `[rpc_endpoints]`, `[etherscan]`, `[fuzz]`, `[invariant]`, and `[lint]` are top-level TOML sections. They MUST appear **after** all `[profile.default]` keys (including `fs_permissions`). If a `[profile.default]` key like `fs_permissions` appears after a `[rpc_endpoints]` or `[etherscan]` section, TOML will parse it as belonging to that section and Foundry will error.
 
 ### 1.2 `package.json`
 
@@ -82,9 +92,9 @@ Create or extend with standard npm scripts:
     "build": "forge build",
     "test": "npm run test:fork && npm run test:local",
     "test:local": "forge test --no-match-test testFork --gas-report -vvv",
-    "test:fork": "source .env && forge test --match-test testFork --fork-url <chain> --gas-report -vvv",
-    "test:fork:all": "source .env && forge test --fork-url <chain> --gas-report -vvv",
-    "coverage": "source .env && forge coverage --fork-url <chain> --report lcov && lcov --remove lcov.info 'test/*' 'script/*' --output-file lcov.info --rc lcov_branch_coverage=1 && genhtml lcov.info -o report --branch-coverage && open report/index.html",
+    "test:fork": "forge test --match-test testFork --fork-url <named-endpoint> --gas-report -vvv",
+    "test:fork:all": "forge test --fork-url <named-endpoint> --gas-report -vvv",
+    "coverage": "forge coverage --fork-url <named-endpoint> --report lcov && lcov --remove lcov.info 'test/*' 'script/*' --output-file lcov.info --rc lcov_branch_coverage=1 && genhtml lcov.info -o report --branch-coverage && open report/index.html",
     "solhint:check": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol'",
     "solhint:fix": "npx solhint --max-warnings 0 --ignore-path .solhintignore 'src/**/*.sol' --fix",
     "doc": "forge doc --out documentation",
@@ -92,6 +102,12 @@ Create or extend with standard npm scripts:
   }
 }
 ```
+
+**Key points for `package.json` scripts**:
+- `<named-endpoint>` = the alias from `[rpc_endpoints]` in `foundry.toml` (e.g. `polygon`, `sepolia`)
+- No `source .env &&` prefix for test/coverage/build scripts — Foundry reads `.env` automatically for `foundry.toml` interpolation
+- Deploy scripts still need `source .env &&` because they reference `${PRIVATE_KEY}` directly in the shell command
+- Deploy scripts use `--rpc-url <named-endpoint>` and just `--verify` (no `--etherscan-api-key`)
 
 ### 1.3 `.solhint.json`
 
@@ -155,7 +171,48 @@ forge install OpenZeppelin/openzeppelin-contracts-upgradeable
 - Update contracts to `import {I<ContractName>}` and `is I<ContractName>`
 
 **If adopting UUPS**:
-- Copy `UUPSOwnable2Step.sol` from the template
+- Create `src/utils/proxy/UUPSOwnable2Step.sol` with the following code (replace `<SOLIDITY_VERSION>` and `<AUTHOR>`):
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity <SOLIDITY_VERSION>;
+
+import {Ownable2StepUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {ERC1967Utils} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol";
+
+//solhint-disable func-name-mixedcase
+//solhint-disable no-empty-blocks
+
+/// @title UUPSOwnable2Step
+/// @author <AUTHOR>
+/// @notice Implementation of UUPS proxy pattern with two-step ownership transfer
+/// @dev Combines UUPSUpgradeable with Ownable2StepUpgradeable for secure upgradeable contracts
+contract UUPSOwnable2Step is UUPSUpgradeable, Ownable2StepUpgradeable {
+    /// @notice Initializes the contract
+    /// @dev Empty initialization as core initialization is handled by parent contracts
+    function __UUPSOwnable2Step_init() internal onlyInitializing {
+        __UUPSOwnable2Step_init_unchained();
+    }
+
+    /// @notice Additional initialization logic (if needed in the future)
+    /// @dev Empty initialization, maintained for potential future use
+    function __UUPSOwnable2Step_init_unchained() internal onlyInitializing {}
+
+    /// @notice Authorizes an upgrade to a new implementation
+    /// @dev Can only be called by the owner
+    /// @param newImplementation Address of the new implementation contract
+    function _authorizeUpgrade(address newImplementation) internal view virtual override onlyOwner {}
+
+    /// @notice Gets the address of the current implementation
+    /// @dev Uses ERC1967Utils to retrieve the implementation address
+    /// @return The address of the current implementation contract
+    function implementation() external view returns (address) {
+        return ERC1967Utils.getImplementation();
+    }
+}
+```
+
 - Each contract should inherit `UUPSOwnable2Step, I<ContractName>`
 - Ensure `initialize()` exists with standard init chain
 - Ensure `_authorizeUpgrade()` is `onlyOwner`
@@ -215,23 +272,25 @@ script/
     └── Create2Utils.sol
 ```
 
-For each file, follow the exact patterns from the template:
+Create the infrastructure files using the canonical code from the **sol-scaffold** skill. The sol-scaffold skill contains the full verbatim code for every file listed below. Adapt the empty-scaffold versions to include the project's existing contracts.
 
-**ConfigAbstract.sol**: Define `Environment` enum, `Config` struct (with `Deployer.Config`), `EnvConfig` struct
+**ConfigAbstract.sol**: Define `Environment` enum, `Config` struct (with `Deployer.Config`), `EnvConfig` struct. Add fields to `EnvConfig` for any external tokens the project uses.
 
-**Config<Chain><Env>.sol**: Implement `_getInitialConfig()` and `_getEnvConfig()` with hardcoded addresses
+**Config<Chain><Env>.sol**: Implement `_getInitialConfig()` and `_getEnvConfig()` with hardcoded addresses for each chain/env.
 
-**DeployBase.s.sol**: Inherit ConfigAbstract + Script + DeployReport + DeployContracts. Implement `run()` that loads config → validates → broadcasts → deploys → writes report
+**DeployBase.s.sol**: Inherit ConfigAbstract + Script + DeployReport + DeployContracts. Implement `run()` that loads config, validates, broadcasts, deploys, and writes report.
 
-**DeployContracts.sol**: Define `Report` struct. Implement `_deployContracts()`, `_deployImplementations()`, `_deployDeployer()`
+**DeployContracts.sol**: Define `Report` struct. Implement `_deployContracts()`, `_deployImplementations()` (one CREATE2 deploy per contract), `_deployDeployer()` (uses `deployer.deployed()` for idempotency).
 
-**DeployReport.s.sol**: Implement `_writeJsonDeployReport()` that serializes all addresses to JSON
+**DeployReport.s.sol**: Implement `_writeJsonDeployReport()` that serializes all proxy, implementation, and token addresses to JSON. Include `getTimestamp()` and `getGitModuleVersion()` FFI helpers.
 
-**Deployer.sol**: Define `Addresses` struct, `Config` struct, `deploy()` function with `_createProxy()` calls for each contract
+**Deployer.sol**: Define `Addresses` struct (one field per contract), `Config` struct, `deploy()` function with `_createProxy()` calls for each contract, `deployed()` getter for idempotency.
 
-**Deploy<Chain><Env>.s.sol**: Empty contract inheriting DeployBase + Config<Chain><Env>
+**Deploy<Chain><Env>.s.sol**: Empty contract inheriting DeployBase + Config<Chain><Env>.
 
-For each contract, create single-deployment scripts following the `Counter.s.sol` pattern.
+**SingleDeployBase.s.sol**: Base with `_getVersion()`, `_getEnv()`, `_getReportPath()`, `_readAddressFromReport()`, `_writeAddressToReport()`.
+
+For each contract, create single-deployment scripts using the template from the **sol-add-contract** skill (Phase 7).
 
 Add npm scripts to `package.json` for each chain/env combination.
 
@@ -470,8 +529,8 @@ After all phases:
 # 1. Build compiles clean
 forge build
 
-# 2. All tests pass
-npm run test:local
+# 2. All tests pass (includes fork tests if configured)
+npm run test
 
 # 3. Linting passes (if adopted)
 npm run solhint:check
@@ -482,6 +541,8 @@ forge fmt --check
 # 5. BTT sync (if adopted)
 bulloak check test/unit/**/*.tree
 ```
+
+**IMPORTANT**: Always validate with `npm run test`, never with raw `forge test`. The npm script is the canonical way to run tests — it includes both local and fork tests, ensuring nothing is silently skipped.
 
 Fix any issues. Report results to the user.
 
@@ -514,4 +575,4 @@ Present this to the user at the end:
 | 7 | Reports directory (if applicable) | |
 | 8 | Documentation (if desired) | |
 | 9 | `forge build` clean | |
-| 9 | `npm run test:local` passes | |
+| 9 | `npm run test` passes | |

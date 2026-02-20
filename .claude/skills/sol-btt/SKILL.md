@@ -219,7 +219,7 @@ function test_WhenNewNumberIsAPositiveValueAsOwner() external givenTheCallerIsTh
 
 // Revert with custom error (no params)
 function test_WhenOwner_IsTheZeroAddress() external givenTheContractIsNotInitialized {
-    // it should revert with Counter_ZeroAddress
+    // it should revert with ContractName_ZeroAddress
     vm.expectRevert(abi.encodeWithSelector(IContractName.ContractName_ZeroAddress.selector));
     testContract.initialize(address(0));
 }
